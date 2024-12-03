@@ -1,7 +1,16 @@
 import { useState } from "react";
-import { InboxOutlined } from "@ant-design/icons";
-import { Image, message, Upload } from "antd";
+import { FileOutlined, InboxOutlined } from "@ant-design/icons";
+import {
+  Image,
+  message,
+  Progress,
+  Space,
+  Spin,
+  Typography,
+  Upload,
+} from "antd";
 import type { GetProp, UploadFile, UploadProps } from "antd";
+import axios from "axios";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -23,39 +32,43 @@ function FormRequestPage2() {
     multiple: true,
     listType: "picture",
     accept: ".png,.jpeg,.doc",
-    action: "http://localhost:5173/",
-    beforeUpload(file, fileList) {
-      console.log(file);
-      return false;
-    },
+    customRequest({ file }: any) {
 
-    // defaultFileList: [
-    //   {
-    //     uid: "-1",
-    //     name: "xxx.png",
-    //     status: "uploading",
-    //     url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    //     thumbUrl:
-    //       "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    //   },
-    // ],
-    onChange(info) {
-    console.log(info)
-     
+      const getFileObject = (progress: any) => {
+        return {
+          name: file.name,
+          uid: file.uid,
+          progress: progress,
+        };
+      };
+
+      axios.post("http://localhost:5173", file, {
+        onUploadProgress: (event) => {
+          console.log(event);
+          setFileList((pre) => {
+            return { ...pre, [file.uid]: getFileObject(event.progress) };
+          });
+        },
+      });
+    },
+    showUploadList: false,
+
+    iconRender(file, listType) {
+      return <Spin></Spin>;
+    },
+    progress: {
+      strokeWidth: 3,
+      strokeColor: {
+        "0%": "#f0f",
+        "100%": "#ff0",
+      },
     },
 
     onDrop(e) {
       console.log("Dropped files", e.dataTransfer.files);
     },
   };
-  const handlePreview = async (file: UploadFile) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj as FileType);
-    }
 
-    setPreviewImage(file.url || (file.preview as string));
-    setPreviewOpen(true);
-  };
   return (
     <div className="rounded-lg p-10 border border-gray-200 w-full md:w-[40%]">
       <p className="text-xl">หลักฐานการร้องขอ</p>
@@ -70,17 +83,27 @@ function FormRequestPage2() {
               เอกสารสำเนาทะเบียนรถ/รายการต่อภาษี(พรบ.)
             </p>
           </Dragger>
-          {previewImage && (
-            <Image
-              wrapperStyle={{ display: "none" }}
-              preview={{
-                visible: previewOpen,
-                onVisibleChange: (visible) => setPreviewOpen(visible),
-                afterOpenChange: (visible) => !visible && setPreviewImage(""),
-              }}
-              src={previewImage}
-            />
-          )}
+          {Object.values(fileList).map((file: any) => {
+            console.log(file);
+            return (
+              <>
+                <Space direction="vertical">
+                  <Space
+                    style={{
+                      background: "rgba(0,0,0,0.05)",
+                      width: 500,
+                      padding: 8,
+                    }}
+                  >
+                    <FileOutlined />
+                    <Typography>{file.name}</Typography>
+                    </Space>
+                    <Progress  percent={file.progress * 100} />
+               
+                </Space>
+              </>
+            );
+          })}
         </div>
 
         <div>
