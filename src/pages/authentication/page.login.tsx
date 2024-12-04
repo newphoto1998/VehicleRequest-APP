@@ -15,14 +15,14 @@ function LoginPage() {
 
         const payload : userLogin = {username: username,password: password};
 
-        const respone = await AuthenticationService(payload)
+        const respone:any = await AuthenticationService(payload)
+
+        
+
+        localStorage.setItem('user_info', JSON.stringify(respone));
+
 
         console.log(respone)
-
-        localStorage.setItem('jwtToken', respone.token);
-
-
-        console.log(respone.token)
 
     }
 

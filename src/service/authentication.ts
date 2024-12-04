@@ -1,11 +1,11 @@
 import http from "../config/axios";
-import { userLogin } from "../Model/UserLogin";
+import { userInfo, userLogin } from "../Model/UserLogin";
 
 
 
 
 export function AuthenticationService(userlogin: userLogin) {
-    return new Promise<any>(resolve => {
+    return new Promise<userInfo>(resolve => {
        http.VITE_BASE_API.post(`/Authentication/login`,userlogin).then((res) => {
          resolve(res.data);
        }).catch((e) => {

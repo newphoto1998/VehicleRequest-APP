@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
-import { Alert, Form, Input, InputNumber, Typography } from "antd";
+import { Alert, Form, Input, InputNumber, Radio, RadioChangeEvent, Typography } from "antd";
 import { getDistrict, getProvince, getTambon } from "../../../service/address";
 import { District, Province, Tambon } from "../../../Model/Adress";
 import {useNavigate } from "react-router-dom";
+import { userInfo } from "../../../Model/UserLogin";
 
+const optionsWithDisabled = [
+    { label: 'ร้องขอแบบปกติ', value: 'normal' },
+    { label: 'ร้องขอแบบฉุกเฉิน', value: 'abnormal' },
+  ];
 function FormRequestPage1() {
 
 
@@ -14,10 +19,23 @@ function FormRequestPage1() {
     const [tambonFilter  ,settambonFilter ] = useState<Tambon[]>([])
     const [zipcode ,setzipcode] = useState<string>("")
 
+
+    const [REQ_TYPE , setREQ_TYPE] = useState<string>("normal")
+    const [busRouteName,setbusRouteName] = useState<string>("true")
+    const [busRouteEmployee , setbusRouteEmployee] = useState<string>("true")
+
+    const users :any  = localStorage.getItem("user_info");
+    const [emp,setemp] = useState<string>("")
+
+    
+
     const navigate = useNavigate()
 
     useEffect(() => {
-      
+        const position:userInfo = JSON.parse(users)
+        
+        console.log(position.user_info.fname)
+
         getDataAddress()
 
      
@@ -80,20 +98,51 @@ function FormRequestPage1() {
         navigate("/request-form-2")
       }
 
+      const onChangeRequestType = ({ target: { value } }: RadioChangeEvent) => {
+        setREQ_TYPE(value);
+      };
+
+      const selectbusRouteName = (event:any) =>{
+ 
+        setbusRouteName(event.target.value)
+      }
+
+      const selectbusRouteEmployee = (event:any) =>{
+        setbusRouteEmployee(event.target.value)
+      }
+
   return (
-    <div className="rounded-lg p-10 border border-gray-200 w-full md:w-[40%]">
-      <p className="text-xl">รายละเอียดผู้ร้องขอ</p>
+    <div className="rounded-lg p-8 border border-gray-200 w-full md:w-[30%]">
+        <div className="flex flex-col md:flex-row justify-between gap-10">
+            <div>    
+                <p className="text-2xl">รายละเอียดผู้ร้องขอ</p>
+            </div>
+        
+                <div>
+                <Radio.Group
+                        options={optionsWithDisabled}
+                        onChange={onChangeRequestType}
+                        value={REQ_TYPE}
+                        optionType="button"
+                        buttonStyle="solid"
+                    />
+                    </div>
+                    
+           
+        </div>
+  
       <form  onSubmit={handleSubmit}>
 
-        <div className="grid md:grid-cols-2 grid-cols-1 gap-5 mt-4  ">
+        <div className="grid md:grid-cols-2 grid-cols-1 gap-5 mt-6">
                 <div className="mb-4">
                 <label htmlFor="username" className=" text-sm font-medium text-gray-700">
                     ชื่อ
                 </label>
                 <input
                     type="text"
-                    id="username"
-                    name="username"
+                    id="fanme"
+                    name="fanme"
+                    value={emp}
                     disabled
                     className={`p-2 bg-[#C1FFFF] w-full border border-gray-300 rounded-md shadow-sm `}
                 />
@@ -109,6 +158,7 @@ function FormRequestPage1() {
                     type="text"
                     id="surn"
                     name="surn"
+                    value={users.lname}
                     disabled
                     className={`p-2 bg-[#C1FFFF] w-full border border-gray-300 rounded-md shadow-sm `}
                 />
@@ -184,24 +234,28 @@ function FormRequestPage1() {
                 </label>
                 <div className="flex justify-start gap-10">
                     <div className="flex items-center mt-4">
-                        <input id="default-radio-1" type="radio" value="" name="default-radio" className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300  dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"/>
+                        <input id="default-radio-1" type="radio" checked={busRouteName == "true"} onChange={(e) => selectbusRouteName(e)} value="true" name="default-radio" className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300  dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"/>
                         <label  className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">ผ่าน</label>
                     </div>
 
                     <div className="flex items-center mt-4">
-                        <input id="default-radio-1" type="radio" value="" name="default-radio" className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300  dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"/>
+                        <input id="default-radio-1" type="radio" checked={busRouteName == "false"} onChange={(e) => selectbusRouteName(e)}  value="false" name="default-radio" className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300  dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"/>
                         <label  className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">ไม่ผ่าน</label>
                     </div>
+                    {busRouteName == "true" &&
 
-                    <div>
-                        <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        
-                        className={`bg-[#FAFFB3] text-gray-700 text-sm p-2 mt-3 w-full border border-gray-300 rounded-md shadow-sm  focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none`}
-                    />
-                    </div>
+                        <div>
+                            <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="ผ่านสายไหน?"
+                            className={`bg-[#FAFFB3] text-gray-700 text-sm p-2 mt-3 w-full border border-gray-300 rounded-md shadow-sm  focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none`}
+                            />
+                        </div>
+                    
+                    }
+                   
 
                     
                 </div>
@@ -216,37 +270,43 @@ function FormRequestPage1() {
                 </label>
                 <div className="flex justify-start gap-10">
                     <div className="flex items-center mt-4">
-                        <input id="default-radio-1" type="radio" value="" name="default-radio" className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300  dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"/>
+                        <input id="default-radio-2" type="radio" checked={busRouteEmployee == "true"} onChange={selectbusRouteEmployee} value="true" name="default-radio2" className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300  dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"/>
                         <label  className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">ผ่าน</label>
                     </div>
 
                     <div className="flex items-center mt-4">
-                        <input id="default-radio-1" type="radio" value="" name="default-radio" className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300  dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"/>
+                        <input id="default-radio-2" type="radio" checked={busRouteEmployee == "false"}  onChange={selectbusRouteEmployee} value="false" name="default-radio2" className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300  dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"/>
                         <label  className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">ไม่ผ่าน</label>
                     </div>
+                  
+                  {busRouteEmployee == "true" &&
 
-                    <div>
-                        <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        
-                        className={`bg-[#FAFFB3]  text-gray-700 text-sm p-2 mt-3 w-full border border-gray-300 rounded-md shadow-sm  focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none`}
-                    />
-                    </div>
+                        <div>
+                                <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                placeholder="มีชื่อสายไหน?"
+
+                                className={`bg-[#FAFFB3]  text-gray-700 text-sm p-2 mt-3 w-full border border-gray-300 rounded-md shadow-sm  focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none`}
+                                />
+                        </div>
+                  
+                  }
+                
                 </div>
 
         </div>
 
 
-            <div className="grid md:grid-cols-4 gap-3 mt-8 [&>*>*]:bg-[#FAFFB3]">
+            <div className="grid md:grid-cols-4 gap-3 mt-8 [&>*>*]:bg-[#FAFFB3] ">
                 
                 <div>       
                     <select onChange={(e) => {District(e.target.value)}} id="countries" className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     <option value={"default"} selected>จังหวัด</option>
-                        {province.map((item : Province) => {
+                        {province.map((item : Province ,index:number) => {
                             return (
-                                <option value={item.id}>{item.name_th}</option>
+                                <option value={item.id} key={index}>{item.name_th}</option>
                             )
                         })}
                      
@@ -260,9 +320,9 @@ function FormRequestPage1() {
 
                         {districtFilter.length > 0 && 
                         <>
-                            {districtFilter.map((item : District) => {
+                            {districtFilter.map((item : District,index:number) => {
                             return (
-                                <option value={item.id}>{item.name_th}</option>
+                                <option value={item.id} key={index}>{item.name_th}</option>
                             )
                         })}
                         </>}
@@ -278,9 +338,9 @@ function FormRequestPage1() {
 
                         {tambonFilter.length > 0 && 
                         <>
-                            {tambonFilter.map((item : Tambon) => {
+                            {tambonFilter.map((item : Tambon,index:number) => {
                             return (
-                                <option value={item.id}>{item.name_th}</option>
+                                <option value={item.id} key={index}>{item.name_th}</option>
                             )
                         })}
                         </>}
@@ -296,7 +356,7 @@ function FormRequestPage1() {
                     name="username"
                     value={zipcode}
                     placeholder="รหัสไปรษณี"
-                    className={`p-2 w-full border border-gray-300 rounded-md shadow-sm text-md  `}
+                    className={`p-3 w-full border border-gray-300 rounded-lg shadow-sm text-gray-900 text-sm !bg-[#C1FFFF] `}
                 />
         </div>
 
