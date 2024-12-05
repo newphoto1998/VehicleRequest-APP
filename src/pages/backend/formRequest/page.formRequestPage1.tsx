@@ -24,7 +24,7 @@ function FormRequestPage1() {
     const [busRouteName,setbusRouteName] = useState<string>("true")
     const [busRouteEmployee , setbusRouteEmployee] = useState<string>("true")
 
-    const users :any  = localStorage.getItem("user_info");
+    //const users :any  = localStorage.getItem("user_info");
     const [emp,setemp] = useState<string>("")
 
     
@@ -32,9 +32,9 @@ function FormRequestPage1() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        const position:userInfo = JSON.parse(users)
+        // const position:userInfo = JSON.parse(users)
         
-        console.log(position.user_info.fname)
+        // console.log(position.user_info.fname)
 
         getDataAddress()
 
@@ -158,7 +158,7 @@ function FormRequestPage1() {
                     type="text"
                     id="surn"
                     name="surn"
-                    value={users.lname}
+                    value=""
                     disabled
                     className={`p-2 bg-[#C1FFFF] w-full border border-gray-300 rounded-md shadow-sm `}
                 />
@@ -216,7 +216,7 @@ function FormRequestPage1() {
         <div className="mt-4">
             <label htmlFor="username" className=" text-sm font-medium text-gray-700">
                         เหตุผลในการนำรถมาทำงาน *
-                    </label>
+                    </label>    
             <textarea
                 id="comment"
                 name="comment"
