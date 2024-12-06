@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { Image, Upload } from "antd";
+import { DatePicker, Image, Upload } from "antd";
 import type { GetProp, UploadFile, UploadProps } from "antd";
 import {useNavigate } from "react-router-dom";
+import type { DatePickerProps } from 'antd';
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -13,6 +14,7 @@ const getBase64 = (file: FileType): Promise<string> =>
     reader.onload = () => resolve(reader.result as string);
     reader.onerror = (error) => reject(error);
   });
+  
 
 function FormRequestPage2() {
 
@@ -28,6 +30,15 @@ function FormRequestPage2() {
   const [fileListCar, setFileListCar] = useState<UploadFile[]>([]);
 
   const [vehicleType , setvehicleType] = useState<string>("car")
+
+  const [value, setValue] = useState<any>({
+    startDate: null,
+    endDate: null
+});
+
+const onChange: DatePickerProps['onChange'] = (date, dateString) => {
+  console.log(date, dateString);
+};
 
   // const props: UploadProps = {
   //   multiple: true,
@@ -211,7 +222,7 @@ function FormRequestPage2() {
            
           
           </div>
-
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <div>
             <label
               htmlFor="username"
@@ -226,6 +237,31 @@ function FormRequestPage2() {
               className={`bg-[#FAFFB3] text-gray-700 text-sm p-2 w-[100%] border border-gray-300 rounded-md shadow-sm  focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none`}
             />
           </div>
+
+           <div>
+            <label
+              htmlFor="username"
+              className=" text-sm font-medium text-gray-700"
+            >
+              วันหมดอายุใบขับขี่*
+            </label>
+         
+                <DatePicker className="bg-[#FAFFB3] text-gray-700 text-sm p-2 w-[100%] border border-gray-300 rounded-md shadow-sm hover:bg-[#FAFFB3] focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none" 
+                onChange={onChange} placeholder=""/>
+          </div>
+
+           <div>
+            <label
+              htmlFor="username"
+              className=" text-sm font-medium text-gray-700"
+            >
+              วันหมดอายุ Tax*
+            </label>
+            <DatePicker className="bg-[#FAFFB3] text-gray-700 text-sm p-2 w-[100%] border border-gray-300 rounded-md shadow-sm hover:bg-[#FAFFB3] focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none" 
+                onChange={onChange} placeholder=""/>
+          </div>
+        </div>
+        
         <div>
           <p className="text-xl mt-2">รายละเอียดชนิดของรถ</p>
    
@@ -266,7 +302,7 @@ function FormRequestPage2() {
 
           
 
-            <div className="mt-2">
+            <div className="groid grid-cols-3 mt-2">
             <label
               htmlFor="username"
               className=" text-sm font-medium text-gray-700"

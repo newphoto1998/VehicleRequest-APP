@@ -1,12 +1,11 @@
 import { BellFilled, FormOutlined, InfoCircleFilled, SettingFilled } from "@ant-design/icons";
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import DescriptionIcon from '@mui/icons-material/Description';
-
 function TestUI() {
   return ( 
  
-    // <body className="bg-[#181a1e]">
-        <body >
+    <body className="bg-[#181a1e]">
+        {/* // <body > */}
 
 
     
@@ -16,7 +15,7 @@ function TestUI() {
         <div className="w-full top-0 left-0 px-10 h-20 text-white flex justify-between shadow-lg fixed">
           <div className="flex items-center gap-2">
             <img className="h-8 w-10 mr-2" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/1024px-Tailwind_CSS_Logo.svg.png?20230715030042" alt="" />
-            <h2 className="text-2xl font-bold text-black">New<span className="text-black">Admin</span></h2>
+            <h2 className="text-2xl font-bold text-white">New<span className="text-cyan-300">Admin</span></h2>
             {/* <h2 className="text-3xl ml-16 text-amber-500">Vehicle Request Form</h2> */}
           </div>
           

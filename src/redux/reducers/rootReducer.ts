@@ -1,7 +1,8 @@
 import {combineReducers} from 'redux'
+import requestFormReducer from './requestFormReducer'
 
 const rootReducer = combineReducers({
-    // trackingStateReducer: trackingReducer,
+    requestFormStateReducer: requestFormReducer,
   
 
 })

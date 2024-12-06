@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Alert, Form, Input, InputNumber, Radio, RadioChangeEvent, Typography } from "antd";
+import { Alert, Divider, Form, Input, InputNumber, Radio, RadioChangeEvent, Typography } from "antd";
 import { getDistrict, getProvince, getTambon } from "../../../service/address";
 import { District, Province, Tambon } from "../../../Model/Adress";
 import {useNavigate } from "react-router-dom";
 import { userInfo } from "../../../Model/UserLogin";
+import { useDispatch, useSelector } from "react-redux";
 
 const optionsWithDisabled = [
     { label: 'ร้องขอแบบปกติ', value: 'normal' },
@@ -11,7 +12,7 @@ const optionsWithDisabled = [
   ];
 function FormRequestPage1() {
 
-
+    const dispatch = useDispatch();
     const [province ,setprovince] = useState<Province[]>([])
     const [district ,setdistrict] = useState<District[]>([])
     const [districtFilter  ,setdistrictFilter ] = useState<District[]>([])
@@ -20,21 +21,29 @@ function FormRequestPage1() {
     const [zipcode ,setzipcode] = useState<string>("")
 
 
-    const [REQ_TYPE , setREQ_TYPE] = useState<string>("normal")
     const [busRouteName,setbusRouteName] = useState<string>("true")
     const [busRouteEmployee , setbusRouteEmployee] = useState<string>("true")
 
-    //const users :any  = localStorage.getItem("user_info");
-    const [emp,setemp] = useState<string>("")
+    const users :any  = localStorage.getItem("user_info");
+    const reqeustFormBase = useSelector((state:any) => state.requestFormStateReducer.requestFormState);
 
     
 
     const navigate = useNavigate()
 
     useEffect(() => {
-        // const position:userInfo = JSON.parse(users)
-        
-        // console.log(position.user_info.fname)
+        const localStorageItem :userInfo = JSON.parse(users)
+        console.log(localStorageItem)
+        dispatch({   type: "ADD_DATA_IN_FORM",
+                      payload:{...reqeustFormBase,
+                                  empCode:localStorageItem.user_info.empCode,
+                                  empName:localStorageItem.user_info.fname,
+                                  empSurn:localStorageItem.user_info.lname,
+                                  empPosition:localStorageItem.user_info.position,
+                                  empSect:localStorageItem.user_info.secT_Long,
+                        
+
+                               } });
 
         getDataAddress()
 
@@ -67,6 +76,10 @@ function FormRequestPage1() {
             setzipcode("");
         }
 
+        handleChange("cusAddr_Province",province.filter((x : Province) => x.id == Number(province_id))[0].name_th);
+        
+
+      
     }
 
 
@@ -74,14 +87,21 @@ function FormRequestPage1() {
  
         let raw_tambon : Tambon[] = await tambon.filter((x : Tambon) => x.amphure_id == Number(district_id))
         settambonFilter(raw_tambon);
+
+        handleChange("cusAddr_District",district.filter((x : Province) => x.id == Number(district_id))[0].name_th);
+
        
     }
 
 
     const Zipcode = async (tambon_id : string) =>{
-
+        console.log(tambonFilter)
         let zipcodes : Tambon[] = tambonFilter.filter((x : Tambon) => x.id == Number(tambon_id))
-         setzipcode(zipcodes.length > 0 ?  zipcodes[0].zip_code ?? "" : "");
+        //  setzipcode(zipcodes.length > 0 ?  zipcodes[0].zip_code ?? "" : "");
+
+         handleChange("cusAddr_Tambon",tambonFilter.filter((x : Tambon) => x.id == Number(tambon_id))[0].name_th);
+         handleChange("cusAddr_Postcode",zipcodes.length > 0 ?  zipcodes[0].zip_code ?? "" : "");
+
     }
 
       const handleSubmit = (e: React.FormEvent) => {
@@ -89,30 +109,32 @@ function FormRequestPage1() {
     
       }
 
-      const handleChange = () =>{
-
-      }
 
       const nextPage = () =>{
         
         navigate("/request-form-2")
       }
 
-      const onChangeRequestType = ({ target: { value } }: RadioChangeEvent) => {
-        setREQ_TYPE(value);
-      };
+   
 
-      const selectbusRouteName = (event:any) =>{
- 
-        setbusRouteName(event.target.value)
-      }
+      function handleChange(key: string, value: any) {
 
-      const selectbusRouteEmployee = (event:any) =>{
-        setbusRouteEmployee(event.target.value)
+       if(key == "busRoute_Address"){
+            setbusRouteName(value);
+        }else if(key == "busRoute_Employee"){
+            setbusRouteEmployee(value);
+        }
+
+        dispatch({   type: "ADD_DATA_IN_FORM",
+                    payload:{...reqeustFormBase,
+                                    [`${key}`]:value,
+                }});
       }
+    
 
   return (
     <div className="rounded-lg p-8 border border-gray-200 w-full md:w-[30%]">
+        {JSON.stringify(reqeustFormBase)}
         <div className="flex flex-col md:flex-row justify-between gap-10">
             <div>    
                 <p className="text-2xl">รายละเอียดผู้ร้องขอ</p>
@@ -120,20 +142,25 @@ function FormRequestPage1() {
         
                 <div>
                 <Radio.Group
+                        style={{fontFamily:"Prompt"}}
                         options={optionsWithDisabled}
-                        onChange={onChangeRequestType}
-                        value={REQ_TYPE}
+                        onChange={(e) => handleChange("req_Type",e.target.value)}
+                        value={reqeustFormBase.req_Type}
                         optionType="button"
                         buttonStyle="solid"
                     />
                     </div>
+
+                 
+
+
                     
            
         </div>
   
       <form  onSubmit={handleSubmit}>
 
-        <div className="grid md:grid-cols-2 grid-cols-1 gap-5 mt-6">
+        <div className="grid md:grid-cols-2 grid-cols-1 gap-5 mt-8  text-sm">
                 <div className="mb-4">
                 <label htmlFor="username" className=" text-sm font-medium text-gray-700">
                     ชื่อ
@@ -142,7 +169,7 @@ function FormRequestPage1() {
                     type="text"
                     id="fanme"
                     name="fanme"
-                    value={emp}
+                    value={reqeustFormBase.empName}
                     disabled
                     className={`p-2 bg-[#C1FFFF] w-full border border-gray-300 rounded-md shadow-sm `}
                 />
@@ -158,7 +185,7 @@ function FormRequestPage1() {
                     type="text"
                     id="surn"
                     name="surn"
-                    value=""
+                    value={reqeustFormBase.empSurn}
                     disabled
                     className={`p-2 bg-[#C1FFFF] w-full border border-gray-300 rounded-md shadow-sm `}
                 />
@@ -168,15 +195,16 @@ function FormRequestPage1() {
         </div>
 
 
-        <div className="grid md:grid-cols-4 grid-cols-1 gap-4 mt-2">
+        <div className="grid md:grid-cols-4 grid-cols-1 gap-4   text-sm">
                 <div >
-                <label htmlFor="username" className=" text-sm font-medium text-gray-700">
+                <label className=" text-sm font-medium text-gray-700">
                     รหัสพนักงาน
                 </label>
                 <input
                     type="text"
                     id="username"
                     name="username"
+                    value={reqeustFormBase.empCode}
                     disabled
                     className={`bg-[#C1FFFF] p-2 w-full border border-gray-300 rounded-md shadow-sm `}
                 />
@@ -191,6 +219,7 @@ function FormRequestPage1() {
                     type="text"
                     id="surn"
                     name="surn"
+                    value={reqeustFormBase.empSect}
                     disabled
                     className={`bg-[#C1FFFF] p-2 w-full border border-gray-300 rounded-md shadow-sm `}
                 />
@@ -206,6 +235,7 @@ function FormRequestPage1() {
                     id="surn"
                     name="surn"
                     disabled
+                    value={reqeustFormBase.empPosition}
                     className={`bg-[#C1FFFF] p-2 w-full border border-gray-300 rounded-md shadow-sm `}
                 />
                 </div>
@@ -220,7 +250,7 @@ function FormRequestPage1() {
             <textarea
                 id="comment"
                 name="comment"
-                onChange={handleChange}
+                onChange={(e) => handleChange("req_Reason",e.target.value)}
                 rows={2} // Set the number of visible rows for the textarea
                 className="text-gray-700 bg-[#FAFFB3] mt-2 p-3 w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
             />
@@ -234,12 +264,12 @@ function FormRequestPage1() {
                 </label>
                 <div className="flex justify-start gap-10">
                     <div className="flex items-center mt-4">
-                        <input id="default-radio-1" type="radio" checked={busRouteName == "true"} onChange={(e) => selectbusRouteName(e)} value="true" name="default-radio" className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300  dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"/>
+                        <input id="default-radio-1" type="radio" checked={busRouteName == "true"} onChange={(e) => handleChange("busRoute_Address",e.target.value)} value="true" name="default-radio" className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300  dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"/>
                         <label  className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">ผ่าน</label>
                     </div>
 
                     <div className="flex items-center mt-4">
-                        <input id="default-radio-1" type="radio" checked={busRouteName == "false"} onChange={(e) => selectbusRouteName(e)}  value="false" name="default-radio" className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300  dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"/>
+                        <input id="default-radio-1" type="radio" checked={busRouteName == "false"} onChange={(e) => handleChange("busRoute_Address",e.target.value)} value="false" name="default-radio" className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300  dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"/>
                         <label  className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">ไม่ผ่าน</label>
                     </div>
                     {busRouteName == "true" &&
@@ -250,6 +280,7 @@ function FormRequestPage1() {
                             id="username"
                             name="username"
                             placeholder="ผ่านสายไหน?"
+                            onChange={(e) => handleChange("busRoute_Address_Data",e.target.value)}
                             className={`bg-[#FAFFB3] text-gray-700 text-sm p-2 mt-3 w-full border border-gray-300 rounded-md shadow-sm  focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none`}
                             />
                         </div>
@@ -270,12 +301,12 @@ function FormRequestPage1() {
                 </label>
                 <div className="flex justify-start gap-10">
                     <div className="flex items-center mt-4">
-                        <input id="default-radio-2" type="radio" checked={busRouteEmployee == "true"} onChange={selectbusRouteEmployee} value="true" name="default-radio2" className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300  dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"/>
+                        <input id="default-radio-2" type="radio" checked={busRouteEmployee == "true"} onChange={(e) => handleChange("busRoute_Employee",e.target.value)} value="true" name="default-radio2" className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300  dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"/>
                         <label  className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">ผ่าน</label>
                     </div>
 
                     <div className="flex items-center mt-4">
-                        <input id="default-radio-2" type="radio" checked={busRouteEmployee == "false"}  onChange={selectbusRouteEmployee} value="false" name="default-radio2" className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300  dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"/>
+                        <input id="default-radio-2" type="radio" checked={busRouteEmployee == "false"}  onChange={(e) => handleChange("busRoute_Employee",e.target.value)} value="false" name="default-radio2" className="cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300  dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"/>
                         <label  className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">ไม่ผ่าน</label>
                     </div>
                   
@@ -287,7 +318,7 @@ function FormRequestPage1() {
                                 id="username"
                                 name="username"
                                 placeholder="มีชื่อสายไหน?"
-
+                                onChange={(e) => handleChange("busRoute_Employee_Data",e.target.value)}
                                 className={`bg-[#FAFFB3]  text-gray-700 text-sm p-2 mt-3 w-full border border-gray-300 rounded-md shadow-sm  focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none`}
                                 />
                         </div>
@@ -354,6 +385,7 @@ function FormRequestPage1() {
                     type="text"
                     id="username"
                     name="username"
+                    disabled
                     value={zipcode}
                     placeholder="รหัสไปรษณี"
                     className={`p-3 w-full border border-gray-300 rounded-lg shadow-sm text-gray-900 text-sm !bg-[#C1FFFF] `}

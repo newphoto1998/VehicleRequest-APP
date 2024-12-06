@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/protect/ProtectRoute";
 import FormRequestPage1 from "./pages/backend/formRequest/page.formRequestPage1";
 import FormRequestPage2 from "./pages/backend/formRequest/page.formRequestPage2";
 import TestUI from "./components/TestUI";
+import Pagenotfound from "./pages/page.notfound";
 
 function Router() {
   const BASE_PATH = "";
@@ -31,6 +32,8 @@ function Router() {
           </Route>
 
           <Route path={BASE_PATH + "/ui"} element={<TestUI />} />
+             {/* 404 Page Not found */}
+        <Route path="*" element={<Pagenotfound />} />
         </Routes>
       </BrowserRouter>
     </>
