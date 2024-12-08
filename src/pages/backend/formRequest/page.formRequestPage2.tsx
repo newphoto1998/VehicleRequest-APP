@@ -125,7 +125,7 @@ const onChange: DatePickerProps['onChange'] = (date, dateString) => {
 
   return (
     
-    <div className="rounded-lg  border border-gray-200 w-full md:w-[30%] p-8">
+    <div className="rounded-lg  border border-gray-200 w-full md:w-full p-8 bg-white">
       
       
       <div className="flex flex-col gap-3 ">

@@ -16,7 +16,6 @@ function TestUI() {
           <div className="flex items-center gap-2">
             <img className="h-8 w-10 mr-2" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Tailwind_CSS_Logo.svg/1024px-Tailwind_CSS_Logo.svg.png?20230715030042" alt="" />
             <h2 className="text-2xl font-bold text-white">New<span className="text-cyan-300">Admin</span></h2>
-            {/* <h2 className="text-3xl ml-16 text-amber-500">Vehicle Request Form</h2> */}
           </div>
           
           <div className="flex items-center gap-4">
@@ -73,8 +72,17 @@ function TestUI() {
           
               
               </div>
+              
+              
+                  
+             <div className=" bg-red-400 w-[80%]  h-full ml-80 fixed px-6 top-20">
+              <div>test</div>
+   
+             </div>
           
           </div>
+          
+      
     
     </div>
       

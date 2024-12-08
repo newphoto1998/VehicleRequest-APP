@@ -20,3 +20,37 @@
     
   }
   
+  body {
+    overflow: hidden;
+  }
+  
+  html,
+  body,
+  #root,
+  .app,
+  .content{
+    /* font-family: 'Prompt', sans-serif !important; */
+    width: 100%;
+    height: 100%;
+    background-color:white;
+    print-color-adjust: economy;
+  }
+  .content > div:first-child {
+    height: 7.5%;
+  }
+  
+  
+  .content_body{
+    background-color: red;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: auto;
+  }
+  .app {
+    display: flex;
+    position: relative;
+    height: 100%;
+  }
+  

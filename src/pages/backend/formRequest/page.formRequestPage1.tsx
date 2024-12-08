@@ -32,18 +32,17 @@ function FormRequestPage1() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        const localStorageItem :userInfo = JSON.parse(users)
-        console.log(localStorageItem)
-        dispatch({   type: "ADD_DATA_IN_FORM",
-                      payload:{...reqeustFormBase,
-                                  empCode:localStorageItem.user_info.empCode,
-                                  empName:localStorageItem.user_info.fname,
-                                  empSurn:localStorageItem.user_info.lname,
-                                  empPosition:localStorageItem.user_info.position,
-                                  empSect:localStorageItem.user_info.secT_Long,
+        // const localStorageItem :userInfo = JSON.parse(users)
+        // dispatch({   type: "ADD_DATA_IN_FORM",
+        //               payload:{...reqeustFormBase,
+        //                           empCode:localStorageItem.user_info.empCode,
+        //                           empName:localStorageItem.user_info.fname,
+        //                           empSurn:localStorageItem.user_info.lname,
+        //                           empPosition:localStorageItem.user_info.position,
+        //                           empSect:localStorageItem.user_info.secT_Long,
                         
 
-                               } });
+        //                        } });
 
         getDataAddress()
 
@@ -133,8 +132,8 @@ function FormRequestPage1() {
     
 
   return (
-    <div className="rounded-lg p-8 border border-gray-200 w-full md:w-[30%]">
-        {JSON.stringify(reqeustFormBase)}
+    <div className="rounded-lg p-8 border border-gray-200 w-full md:w-[50%] bg-white">
+    
         <div className="flex flex-col md:flex-row justify-between gap-10">
             <div>    
                 <p className="text-2xl">รายละเอียดผู้ร้องขอ</p>
