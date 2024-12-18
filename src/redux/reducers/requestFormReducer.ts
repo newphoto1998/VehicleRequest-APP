@@ -1,18 +1,17 @@
-
 const initialData = {
 
     requestFormState:{
      
-      req_Type:'',
+      req_Type:'normal',
       empCode:'',
       empName:'',
       empSurn:'',
       empPosition:'',
       empSect:'',
       req_Reason:'',
-      busRoute_Address:'',
+      busRoute_Address:'true',
       busRoute_Address_Data:'',
-      busRoute_Employee:'',
+      busRoute_Employee:'true',
       busRoute_Employee_Data:'',
       cusAddr:'',
       cusAddr_Province:'',  
@@ -20,26 +19,22 @@ const initialData = {
       cusAddr_Tambon:'',
       cusAddr_Postcode:'',
 
-      file_Tax:File,
+      file_Tax:[],
       file_Tax_name:'',
-      tax_ExpireDT:Date,
+      tax_ExpireDT:'',
 
      
-      file_DriverLicense:File,
-      driverlicense_ExporeDT:Date,
+      file_DriverLicense:[],
+      file_DriverLicense_name:'',
+      driverlicense_ExporeDT:'',
       driverLicenseNo:'',
 
     
-      file_Pic_Front:File,
-      file_Pic_Front_name:'',
-      file_Pic_Back:File,
-      file_Pic_Back_name:'',
-      file_Pic_Left:File,
-      file_Pic_Left_name:'',
-      file_Pic_Right:File,
-      file_Pic_Right_name:'',
+      file_Pic_car:[],
+      file_Pic_car_name:[],
 
-      vehicleType:'',
+
+      vehicleType:'car',
       vehicleNo:'',
       vehicleBrand:'',
       vehicleCategory:'',
@@ -54,8 +49,9 @@ const initialData = {
       
       
   
-    }
-  
+    },
+    
+   
    
   }
   
@@ -86,24 +82,20 @@ const initialData = {
             cusAddr_Tambon:action.payload.cusAddr_Tambon,
             cusAddr_Postcode:action.payload.cusAddr_Postcode,
       
-            file_Tax:action.payload.cusAddr_Postcode,
+            file_Tax:action.payload.file_Tax,
             file_Tax_name:action.payload.file_Tax_name,
-            tax_ExpireDT:action.payload.cusAddr_Postcode,
+            tax_ExpireDT:action.payload.tax_ExpireDT,
       
            
             file_DriverLicense:action.payload.file_DriverLicense,
+            file_DriverLicense_name:action.payload.file_DriverLicense_name,
             driverlicense_ExporeDT:action.payload.driverlicense_ExporeDT,
             driverLicenseNo:action.payload.driverLicenseNo,
       
           
-            file_Pic_Front:action.payload.file_Pic_Front,
-            file_Pic_Front_name:action.payload.file_Pic_Front_name,
-            file_Pic_Back:action.payload.file_Pic_Back,
-            file_Pic_Back_name:action.payload.file_Pic_Back_name,
-            file_Pic_Left:action.payload.file_Pic_Left,
-            file_Pic_Left_name:action.payload.file_Pic_Left_name,
-            file_Pic_Right:action.payload.file_Pic_Right,
-            file_Pic_Right_name:action.payload.file_Pic_Right_name,
+            file_Pic_car:action.payload.file_Pic_car,
+            file_Pic_car_name:action.payload.file_Pic_car_name,
+            
       
             vehicleType:action.payload.vehicleType,
             vehicleNo:action.payload.vehicleNo,
@@ -118,6 +110,35 @@ const initialData = {
   
           }
         }
+
+      case 'CLEAR_PROVICE':
+      return {
+            ...state,
+            requestFormState:{
+              cusAddr_Province:"",  
+              cusAddr_District:"",
+              cusAddr_Tambon:"",
+              cusAddr_Postcode:"",
+            }
+      }
+
+      case 'CLEAR_DISTRICT':
+        return {
+              requestFormState:{
+                cusAddr_District:"",
+                cusAddr_Tambon:"",
+                cusAddr_Postcode:"",
+              }
+        }
+
+        case 'CLEAR_TAMBON':
+          return {
+                requestFormState:{
+                  cusAddr_Tambon:"",
+                  cusAddr_Postcode:"",
+                }
+          }
+    
   
  
                 

@@ -8,7 +8,7 @@ function Sidebar() {
         <div className="w-full flex justify-center items-center">
           <img
             className="h-28 w-28 object-cover rounded-full"
-            src="../../public/assets/image/me.jpg"
+            src="http://dcidmc.dci.daikin.co.jp/PICTURE/41210.jpg"
             alt=""
           />
         </div>
