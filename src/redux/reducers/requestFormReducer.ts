@@ -20,7 +20,7 @@ const initialData = {
       cusAddr_Postcode:'',
 
       file_Tax:[],
-      file_Tax_name:'',
+      file_Tax_name:[],
       tax_ExpireDT:'',
 
      
@@ -115,10 +115,36 @@ const initialData = {
       return {
             ...state,
             requestFormState:{
-              cusAddr_Province:"",  
-              cusAddr_District:"",
-              cusAddr_Tambon:"",
-              cusAddr_Postcode:"",
+          
+                req_Type:'normal',
+                req_Reason: "",
+                busRoute_Address: "true",
+                busRoute_Address_Data: "",
+                busRoute_Employee: "true",
+                busRoute_Employee_Data: "",
+                cusAddr: "",
+                cusAddr_Province: "",
+                cusAddr_District: "",
+                cusAddr_Tambon: "",
+                cusAddr_Postcode: "",
+                file_Tax: [],
+                file_Tax_name: [],
+                tax_ExpireDT: "",
+                file_DriverLicense: [],
+                file_DriverLicense_name: "",
+                driverlicense_ExporeDT: "",
+                driverLicenseNo: "",
+                file_Pic_car: [],
+                file_Pic_car_name: [],
+
+                vehicleType: "car",
+                vehicleNo: "",
+                vehicleBrand: "",
+                vehicleCategory: "",
+                stickerNo: "",
+
+                req_Status: "",
+                req_By: "",
             }
       }
 

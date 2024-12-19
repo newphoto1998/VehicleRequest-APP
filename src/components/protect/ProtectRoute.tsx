@@ -1,5 +1,5 @@
 import useAuth from "./useAuth";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from 'react-router-dom'
 
 
 // interface ProtectedRouteProps {
@@ -9,11 +9,10 @@ import { useNavigate } from "react-router-dom";
 //   }
 const ProtectedRoute = ({ redirectPath ="/",children}:any) => {
     
-  const navigate = useNavigate();
   const isAuthenticated = useAuth();
 
   if (!isAuthenticated) {
-    return navigate(redirectPath);
+    return <Navigate to={redirectPath} />
   }
 
   return (

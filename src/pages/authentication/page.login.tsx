@@ -1,9 +1,12 @@
 import { useState } from "react"
 import { AuthenticationService, getDataService } from "../../service/authentication"
 import { userLogin } from "../../Model/UserLogin"
+import Swal from "sweetalert2"
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
 
+    const navigate = useNavigate();
     const [username , setusername] = useState<string>("")
     const [password , setpassword] = useState<string>("")
 
@@ -12,17 +15,54 @@ function LoginPage() {
     const Login = async(e: React.MouseEvent<HTMLButtonElement>) =>{
 
         e.preventDefault();
+        if(username != "" && password != "" ){
+            const payload : userLogin = {username: username,password: password};
 
-        const payload : userLogin = {username: username,password: password};
-
-        const respone:any = await AuthenticationService(payload)
-
+            const respone:any = await AuthenticationService(payload)
+    
+            if(respone.status == 200){
+                localStorage.setItem('user_info', JSON.stringify(respone));
+                let timerInterval:number;
+                Swal.fire({
+                  title: "กำลังเข้าสู่ระบบ ..",
+                  timer: 1500,
+                  timerProgressBar: true,
+                  didOpen: () => {
+                    Swal.showLoading();
+                    const timer :any= Swal.getPopup()?.querySelector("b");
+                    timerInterval = setInterval(() => {
+                      timer.textContent = `${Swal.getTimerLeft()}`;
+                    }, 100);
+                  },
+                  willClose: () => {
+                    clearInterval(timerInterval);
+                  }
+                }).then((result) => {
+                  /* Read more about handling dismissals below */
+                  if (result.dismiss === Swal.DismissReason.timer) {
+                        
+                        navigate("/request-form-1")
+                  }
+                });
         
-
-        localStorage.setItem('user_info', JSON.stringify(respone));
-
-
-        console.log(respone)
+          
+            }else{
+                 Swal.fire({
+                            icon: "error",
+                            title: "เข้าสู่ระบบไม่สำเร็จ",
+                            html: 'username หรือ password ไม่ถูกต้อง',                          
+                          });
+            }
+    
+        }else{
+            Swal.fire({
+                icon: "error",
+                title: "เข้าสู่ระบบไม่สำเร็จ",
+                html: 'กรุณากรอก username และ password ให้ครบ',                          
+              });
+        }
+    
+       
 
     }
 

@@ -9,7 +9,8 @@ export function AuthenticationService(userlogin: userLogin) {
        http.VITE_BASE_API.post(`/Authentication/login`,userlogin).then((res) => {
          resolve(res.data);
        }).catch((e) => {
-         console.log(e);
+        console.log(e);
+        resolve(e)
        });
     })
 };

@@ -7,9 +7,9 @@ import type { GetProp, UploadFile, UploadProps } from "antd";
 import { useNavigate } from "react-router-dom";
 import type { DatePickerProps } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { ADD_RequestForm_Service } from "../../../service/requestForm";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { ADD_RequestForm_Service } from "../../../service/requestForm";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
@@ -27,22 +27,61 @@ function FormRequestPage2() {
   const navigate = useNavigate();
   const [previewTaxOpen, setPreviewTaxOpen] = useState(false);
   const [previewTaxImage, setPreviewTaxImage] = useState("");
-  const [previewDriverLicenseOpen, setPreviewDriverLicenseOpen] =
-    useState(false);
-  const [previewDriverLicenseImage, setPreviewDriverLicenseImage] =
-    useState("");
+  const [previewDriverLicenseOpen, setPreviewDriverLicenseOpen] = useState(false);
+  const [previewDriverLicenseImage, setPreviewDriverLicenseImage] = useState("");
   const [previewCarOpen, setPreviewCarOpen] = useState(false);
   const [previewCarImage, setPreviewCarImage] = useState("");
   const [fileListTax, setFileListTax] = useState<UploadFile[]>([]);
-  const [fileListDriverLicense, setFileListDriverLicense] = useState<
-    UploadFile[]
-  >([]);
+  const [fileListDriverLicense, setFileListDriverLicense] = useState<UploadFile[]>([]);
   const [fileListCar, setFileListCar] = useState<UploadFile[]>([]);
 
-  const reqeustFormBase = useSelector(
-    (state: any) => state.requestFormStateReducer.requestFormState
-  );
+  const [errors, setErrors] = useState({
+    file_Tax: [],
+    file_Tax_name:"",
+    tax_ExpireDT:"",
+    file_DriverLicense:"",
+    file_DriverLicense_name:"",
+    driverlicense_ExporeDT:"",
+    driverLicenseNo:"",
+    file_Pic_car:[],
+    file_Pic_car_name:[],
+    vehicleNo:"",
+    vehicleBrand:"",
+    vehicleCategory:"",
 
+  });
+
+  const reqeustFormBase = useSelector((state: any) => state.requestFormStateReducer.requestFormState);
+
+
+   useEffect(() => {
+      dispatch({
+        type: "ADD_DATA_IN_FORM",
+        payload: {
+          ...reqeustFormBase,
+          file_Tax: [],
+          file_Tax_name: [],
+          tax_ExpireDT: "",
+          file_DriverLicense: [],
+          file_DriverLicense_name: "",
+          driverlicense_ExporeDT: "",
+          driverLicenseNo: "",
+          file_Pic_car: [],
+          file_Pic_car_name: [],
+  
+          vehicleType: "car",
+          vehicleNo: "",
+          vehicleBrand: "",
+          vehicleCategory: "",
+          stickerNo: "",
+  
+          req_Status: "",
+          req_By: "",
+        },
+      });
+  
+ 
+    }, []);
 
   const onChangeDriverDate: DatePickerProps["onChange"] = (date,dateString) => {
     handleChange("driverlicense_ExporeDT", dateString);
@@ -52,35 +91,6 @@ function FormRequestPage2() {
     handleChange("tax_ExpireDT", dateString);
   };
 
-  // const props: UploadProps = {
-  //   multiple: true,
-  //   maxCount: 1,
-  //   listType: "picture-card",
-  //   accept: ".png,.jpeg,.doc",
-  //   action: "http://localhost:8000/uploadFile/",
-  //   beforeUpload(file, fileList) {
-  //     console.log(file);
-  //     return false;
-  //   },
-
-  //   // defaultFileList: [
-  //   //   {
-  //   //     uid: "-1",
-  //   //     name: "xxx.png",
-  //   //     status: "uploading",
-  //   //     url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-  //   //     thumbUrl:
-  //   //       "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-  //   //   },
-  //   // ],
-  //   onChange(info) {
-  //     console.log(info);
-  //   },
-
-  //   onDrop(e) {
-  //     console.log("Dropped files", e.dataTransfer.files);
-  //   },
-  // };
 
   const beforeUpload = () => {
     return false;
@@ -160,70 +170,172 @@ function FormRequestPage2() {
     });
   }
 
-  const handleSubmit = async () => {
+  // const handleSubmit = async () => {
 
 
 
-    const formData = new FormData();
+  //   const formData = new FormData();
 
 
-    Object.entries(reqeustFormBase).forEach(([key, value]:any) => {
+  //   Object.entries(reqeustFormBase).forEach(([key, value]:any) => {
 
       
-      if(key == "file_Tax"){
-        reqeustFormBase.file_Tax.forEach((file: any) => {
-          formData.append("file_Tax", file);
-        });
-      }
-      else if(key == "file_Tax_name"){
-        reqeustFormBase.file_Tax_name.forEach((name: any) => {
-          formData.append("file_Tax_name", name);
-        });
-      }     
-      else if(key == "file_Pic_car"){   
-        reqeustFormBase.file_Pic_car.forEach((file: any) => {
-          formData.append("file_Pic_car", file);
-        });
-      }else if(key == "file_Pic_car_name"){
-        reqeustFormBase.file_Pic_car_name.forEach((name: any) => {
-          formData.append("file_Pic_car_name", name);
-        });
-      }else{  
-        formData.append(key, value);
-      }
+  //     if(key == "file_Tax"){
+  //       reqeustFormBase.file_Tax.forEach((file: any) => {
+  //         formData.append("file_Tax", file);
+  //       });
+  //     }
+  //     else if(key == "file_Tax_name"){
+  //       reqeustFormBase.file_Tax_name.forEach((name: any) => {
+  //         formData.append("file_Tax_name", name);
+  //       });
+  //     }     
+  //     else if(key == "file_Pic_car"){   
+  //       reqeustFormBase.file_Pic_car.forEach((file: any) => {
+  //         formData.append("file_Pic_car", file);
+  //       });
+  //     }else if(key == "file_Pic_car_name"){
+  //       reqeustFormBase.file_Pic_car_name.forEach((name: any) => {
+  //         formData.append("file_Pic_car_name", name);
+  //       });
+  //     }else{  
+  //       formData.append(key, value);
+  //     }
 
-    })
+  //   })
 
-    //const respone:any = await ADD_RequestForm_Service(formData)
-    Swal.fire({
-      position: "top-end",
-      icon: "success",
-      title: "บันทึกข้อมูลเรียบร้อย",
-      showConfirmButton: false,
-      timer: 1500
-    });
+  //   //const respone:any = await ADD_RequestForm_Service(formData)
+  //   Swal.fire({
+  //     position: "top-end",
+  //     icon: "success",
+  //     title: "บันทึกข้อมูลเรียบร้อย",
+  //     showConfirmButton: false,
+  //     timer: 1500
+  //   });
 
-    // try {
-    //   const response = axios.post(
-    //     "http://localhost:5207/api/FormRequest/upload",
-    //     formData,
-    //     {
-    //       headers: {
-    //         "Content-Type": "multipart/form-data",
-    //       },
-    //     }
-    //   );
-    // } catch (error) {}
+  //   // try {
+  //   //   const response = axios.post(
+  //   //     "http://localhost:5207/api/FormRequest/upload",
+  //   //     formData,
+  //   //     {
+  //   //       headers: {
+  //   //         "Content-Type": "multipart/form-data",
+  //   //       },
+  //   //     }
+  //   //   );
+  //   // } catch (error) {}
 
-    // เพิ่มไฟล์ทั้งหมดลงใน FormData
+  //   // เพิ่มไฟล์ทั้งหมดลงใน FormData
+  // };
+
+  const handleSubmit = async(e: React.FormEvent) => {
+    e.preventDefault();
+   
+    if (validate()) {
+      // ทำอะไรเมื่อฟอร์มผ่านการตรวจสอบ
+    
+      const formData = new FormData();
+
+      Object.entries(reqeustFormBase).forEach(([key, value]:any) => {
+         
+        if(key == "file_Tax"){
+          reqeustFormBase.file_Tax.forEach((file: any) => {
+            formData.append("file_Tax", file);
+          });
+        }
+        else if(key == "file_Tax_name"){
+          reqeustFormBase.file_Tax_name.forEach((name: any) => {
+            formData.append("file_Tax_name", name);
+          });
+        }     
+        else if(key == "file_Pic_car"){   
+          reqeustFormBase.file_Pic_car.forEach((file: any) => {
+            formData.append("file_Pic_car", file);
+          });
+        }else if(key == "file_Pic_car_name"){
+          reqeustFormBase.file_Pic_car_name.forEach((name: any) => {
+            formData.append("file_Pic_car_name", name);
+          });
+        }else{  
+          formData.append(key, value);
+        }
+  
+      })
+
+        const respone:any = await ADD_RequestForm_Service(formData)
+       
+        if(respone.status == true){
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "บันทึกข้อมูลเรียบร้อย",
+            showConfirmButton: false,
+            timer: 1500
+          });
+          
+        }else{
+          Swal.fire({
+            icon: "error",
+            title: "บึนทึกข้อมูลไม่สําเร็จ",
+            html: 'กรุณาตรวจสอบข้อมูลอีกครั้ง <br>หรือ ติดต่อแผนก GA (103) / IT (250)',
+      
+            
+          });
+        }
+       
+    }
+  };
+
+
+  const validate = () => {
+    const newErrors = {};
+    if (fileListTax.length < 2) {
+      newErrors.file_Tax = "กรุณาใส่รูปให้ครบ";
+    }
+    if (fileListDriverLicense.length < 1) {
+      newErrors.file_DriverLicense = "กรุณาใส่รูปให้ครบ";
+    }
+   
+    if (fileListCar.length < 4) {
+      newErrors.file_Pic_car = "กรุณาใส่รูปให้ครบ";
+    }
+    
+    if (!reqeustFormBase.driverLicenseNo) {
+      newErrors.driverLicenseNo = "กรุณากรอกเลขที่ใบขับขี่";
+    }
+
+    if (!reqeustFormBase.driverlicense_ExporeDT) {
+      newErrors.driverlicense_ExporeDT = "กรุณาใส่วันที่หมดอายุใบขับขี่";
+    }
+
+    if (!reqeustFormBase.tax_ExpireDT) {
+      newErrors.tax_ExpireDT = "กรุณาใส่วันที่หมดอายุ Tax";
+    }
+
+    if (!reqeustFormBase.vehicleNo) {
+      newErrors.vehicleNo = "กรุณากรอกเลขทะเบียน";
+    }
+
+    if (!reqeustFormBase.vehicleCategory) {
+      newErrors.vehicleCategory = "กรุณากรอกชนิดรถ";
+    }
+
+    if (!reqeustFormBase.vehicleBrand) {
+      newErrors.vehicleBrand = "กรุณากรอกยี่ห้อรถ";
+    }
+
+    setErrors(newErrors);
+    console.log(newErrors);
+
+    return Object.keys(newErrors).length === 0; // ถ้าไม่มีข้อผิดพลาดจะคืนค่า true
   };
 
   return (
     <div className="h-full ml-80 fixed px-6">
       <div className="rounded-lg p-8 border border-gray-200 w-full md:w-[60%] bg-white">
+      <form onSubmit={handleSubmit}> 
         <div className="flex flex-col gap-3 ">
           <p className="text-xl">หลักฐานการร้องขอ</p>
-
           <div className="text-sm font-medium text-gray-700 mt-2">
             <p>สำเนาทะเบียนรถ/รายการต่อภาษี(พรบ.)</p>
 
@@ -234,8 +346,10 @@ function FormRequestPage2() {
               beforeUpload={beforeUpload}
               maxCount={2}
               fileList={fileListTax}
-              onPreview={() => handlePreview("test", fileListTax[0])}
+              onPreview={() => handlePreview("TAX", fileListTax[0])}
               onChange={handleChangeTax}
+              multiple
+              accept=".png,.jpeg,.jpg" 
             >
               {fileListTax.length >= 2 ? null : uploadButton}
             </Upload>
@@ -251,6 +365,8 @@ function FormRequestPage2() {
                 src={previewTaxImage}
               />
             )}
+            {errors.file_Tax && (<p className="mt-1 text-[12px] text-red-500">{errors.file_Tax}</p>)}
+
           </div>
 
           <div className="text-sm font-medium text-gray-700 ">
@@ -267,6 +383,7 @@ function FormRequestPage2() {
                 handlePreview("LICENSE", fileListDriverLicense[0])
               }
               onChange={handleChangeDriverLicense}
+              accept=".png,.jpeg,.jpg" 
             >
               {fileListDriverLicense.length >= 1 ? null : uploadButton}
             </Upload>
@@ -283,6 +400,8 @@ function FormRequestPage2() {
                 src={previewDriverLicenseImage}
               />
             )}
+                        {errors.file_DriverLicense && (<p className="mt-1 text-[12px] text-red-500">{errors.file_DriverLicense}</p>)}
+
           </div>
 
           <div className="text-sm font-medium text-gray-700 ">
@@ -297,6 +416,7 @@ function FormRequestPage2() {
               onPreview={() => handlePreview("CAR", fileListCar[0])}
               onChange={handleChangeCar}
               multiple
+              accept=".png,.jpeg,.jpg" 
             >
               {fileListCar.length >= 4 ? null : uploadButton}
             </Upload>
@@ -311,54 +431,73 @@ function FormRequestPage2() {
                 }}
                 src={previewCarImage}
               />
+              
             )}
+              {errors.file_Pic_car && (<p className="mt-1 text-[12px] text-red-500">{errors.file_Pic_car}</p>)}
+
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div>
               <label
-                htmlFor="username"
+                htmlFor="driverLicenseNo"
                 className=" text-sm font-medium text-gray-700"
               >
                 เลขที่ใบขับขี่*
               </label>
               <input
                 type="text"
-                id="username"
-                name="username"
+                id="driverLicenseNo"
+                name="driverLicenseNo"
                 onChange={(e) =>
                   handleChange("driverLicenseNo", e.target.value)
                 }
-                className={`bg-[#FAFFB3] text-gray-700 text-sm p-2 w-[100%] border border-gray-300 rounded-md shadow-sm  focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none`}
+                className={`bg-[#FAFFB3] text-gray-700 text-sm p-2 w-[100%] border border-gray-300 
+                  rounded-md shadow-sm  focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none
+                  ${errors.driverLicenseNo ? "border-red-500 " : ""}`}
               />
+              {errors.driverLicenseNo && (<p className="mt-1 text-[12px] text-red-500">{errors.driverLicenseNo}</p>)}
             </div>
 
             <div>
               <label
-                htmlFor="username"
+                htmlFor="driverlicense_ExporeDT"
                 className=" text-sm font-medium text-gray-700"
               >
                 วันหมดอายุใบขับขี่*
               </label>
 
               <DatePicker
-                className="bg-[#FAFFB3] text-gray-700 text-sm p-2 w-[100%] border border-gray-300 rounded-md shadow-sm hover:bg-[#FAFFB3] focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+                className={`bg-[#FAFFB3] text-gray-700 text-sm p-2 w-[100%] border 
+                  border-gray-300 rounded-md shadow-sm hover:bg-[#FAFFB3] 
+                  focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none 
+                   ${errors.driverlicense_ExporeDT ? "border-red-500 " : ""}`}
+                name="driverlicense_ExporeDT"
                 onChange={onChangeDriverDate}
                 placeholder=""
               />
+              {errors.driverlicense_ExporeDT && (<p className="mt-1 text-[12px] text-red-500">{errors.driverlicense_ExporeDT}</p>)}
+
             </div>
 
             <div>
               <label
-                htmlFor="username"
+                htmlFor="tax_ExpireDT"
                 className=" text-sm font-medium text-gray-700"
               >
                 วันหมดอายุ Tax*
               </label>
               <DatePicker
-                className="bg-[#FAFFB3] text-gray-700 text-sm p-2 w-[100%] border border-gray-300 rounded-md shadow-sm hover:bg-[#FAFFB3] focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+                className={`bg-[#FAFFB3] text-gray-700 text-sm p-2 
+                w-[100%] border border-gray-300 
+                rounded-md shadow-sm hover:bg-[#FAFFB3] 
+                focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none
+                 ${errors.tax_ExpireDT ? "border-red-500 " : ""}`}
                 onChange={onChangeTaxDate}
+                name="tax_ExpireDT"
                 placeholder=""
               />
+             {errors.tax_ExpireDT && (<p className="mt-1 text-[12px] text-red-500">{errors.tax_ExpireDT}</p>)}
+
             </div>
           </div>
 
@@ -380,6 +519,7 @@ function FormRequestPage2() {
                       }
                       className="cursor-pointerw-4 h-4 text-blue-600 bg-gray-100 border-gray-300  dark:ring-offset-gray-800  dark:bg-gray-700 dark:border-gray-600"
                     />
+
                     <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                       รถยนต์
                     </label>
@@ -415,11 +555,16 @@ function FormRequestPage2() {
                 </label>
                 <input
                   type="text"
-                  id="username"
-                  name="username"
+                  id="vehicleNo"
+                  name="vehicleNo"
                   onChange={(e) => handleChange("vehicleNo", e.target.value)}
-                  className={`bg-[#FAFFB3] text-gray-700 text-sm p-2 w-full border border-gray-300 rounded-md shadow-sm  focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none`}
+                  className={`bg-[#FAFFB3] text-gray-700 text-sm p-2 w-full border border-gray-300 
+                    rounded-md shadow-sm  focus:outline-none focus:ring-1 
+                    focus:ring-blue-500 resize-none
+                     ${errors.vehicleNo ? "border-red-500 " : ""}`}
                 />
+                 {errors.vehicleNo && (<p className="mt-1 text-[12px] text-red-500">{errors.vehicleNo}</p>)}
+
               </div>
             </div>
 
@@ -433,15 +578,16 @@ function FormRequestPage2() {
                 </label>
                 <input
                   type="text"
-                  id="username"
-                  name="username"
+                  id="vehicleCategory"
+                  name="vehicleCategory"
                   onChange={(e) =>
                     handleChange("vehicleCategory", e.target.value)
                   }
-                  className={`p-2 bg-[#FAFFB3] w-full border border-gray-300 rounded-md shadow-sm `}
+                  className={`p-2 bg-[#FAFFB3] w-full border border-gray-300 rounded-md shadow-sm  
+                    ${errors.vehicleCategory ? "border-red-500 " : ""}`}
                 />
-                {/* {errors.username && <p className="text-red-500 text-xs">{errors.username}</p>} */}
-              </div>
+                 {errors.vehicleCategory && (<p className="mt-1 text-[12px] text-red-500">{errors.vehicleCategory}</p>)}
+                 </div>
 
               <div>
                 <label
@@ -452,11 +598,14 @@ function FormRequestPage2() {
                 </label>
                 <input
                   type="text"
-                  id="surn"
-                  name="surn"
+                  id="vehicleBrand"
+                  name="vehicleBrand"
                   onChange={(e) => handleChange("vehicleBrand", e.target.value)}
-                  className={`p-2 bg-[#FAFFB3] w-full border border-gray-300 rounded-md shadow-sm `}
+                  className={`p-2 bg-[#FAFFB3] w-full border border-gray-300 rounded-md shadow-sm  
+                    ${errors.vehicleBrand ? "border-red-500 " : ""}`}
                 />
+                 {errors.vehicleBrand && (<p className="mt-1 text-[12px] text-red-500">{errors.vehicleBrand}</p>)}
+
               </div>
             </div>
           </div>
@@ -482,6 +631,7 @@ function FormRequestPage2() {
             </button>
           </div>
         </div>
+        </form>
       </div>
     </div>
   );
