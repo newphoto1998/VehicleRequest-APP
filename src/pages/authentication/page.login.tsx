@@ -1,8 +1,9 @@
-import { useState } from "react"
-import { AuthenticationService, getDataService } from "../../service/authentication"
+import { useEffect, useState } from "react"
+import { AuthenticationService } from "../../service/authentication"
 import { userLogin } from "../../Model/UserLogin"
 import Swal from "sweetalert2"
 import { useNavigate } from "react-router-dom";
+import useAuth from "../../components/protect/useAuth";
 
 function LoginPage() {
 
@@ -10,19 +11,36 @@ function LoginPage() {
     const [username , setusername] = useState<string>("")
     const [password , setpassword] = useState<string>("")
 
+  useEffect(() => {
+    
+ 
+    // if (localStorage.getItem("user_info")) {
+    //   navigate("/request-form-1");
+    // }else{
+    //   navigate("/");
+    // }
 
+
+  
+
+    
+
+  }, [])
+
+  
+  
 
     const Login = async(e: React.MouseEvent<HTMLButtonElement>) =>{
 
         e.preventDefault();
         if(username != "" && password != "" ){
+            
             const payload : userLogin = {username: username,password: password};
-
             const respone:any = await AuthenticationService(payload)
-    
+      
             if(respone.status == 200){
-                localStorage.setItem('user_info', JSON.stringify(respone));
-                let timerInterval:number;
+                localStorage.setItem('user_info', JSON.stringify(respone.data));
+                let timerInterval:any;
                 Swal.fire({
                   title: "กำลังเข้าสู่ระบบ ..",
                   timer: 1500,
@@ -52,6 +70,7 @@ function LoginPage() {
                             title: "เข้าสู่ระบบไม่สำเร็จ",
                             html: 'username หรือ password ไม่ถูกต้อง',                          
                           });
+          
             }
     
         }else{
@@ -60,6 +79,7 @@ function LoginPage() {
                 title: "เข้าสู่ระบบไม่สำเร็จ",
                 html: 'กรุณากรอก username และ password ให้ครบ',                          
               });
+
         }
     
        

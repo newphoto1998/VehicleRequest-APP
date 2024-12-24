@@ -326,7 +326,7 @@ function FormRequestPage1() {
   };
 
   return (
-    <div className="rounded-lg p-8 border border-gray-200 w-full md:w-[30%] bg-white">
+    <div className="rounded-lg p-8 border border-gray-200 w-full md:w-[60%] bg-white">
       <div className="flex flex-col md:flex-row justify-between gap-10">
         <div>
           <p className="text-2xl">รายละเอียดผู้ร้องขอ</p>

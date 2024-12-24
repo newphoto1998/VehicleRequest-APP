@@ -10,6 +10,12 @@ export interface userInfo {
  
 }
 
+export interface responeApi {
+  status: number;
+  message: string;
+  data: userInfo;
+}
+
 export interface empDetail {
   empCode?: string;
 

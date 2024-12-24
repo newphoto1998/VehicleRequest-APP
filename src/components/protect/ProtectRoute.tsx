@@ -10,7 +10,6 @@ import { Navigate } from 'react-router-dom'
 const ProtectedRoute = ({ redirectPath ="/",children}:any) => {
     
   const isAuthenticated = useAuth();
-
   if (!isAuthenticated) {
     return <Navigate to={redirectPath} />
   }

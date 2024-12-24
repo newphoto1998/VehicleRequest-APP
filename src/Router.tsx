@@ -21,7 +21,7 @@ function Router() {
             <Route path={BASE_PATH + "/"} element={<LoginPage />} />
           </Route>
 
-          <Route element={<ProtectedRoute><BackendLayout /></ProtectedRoute>}>
+          <Route element={<BackendLayout />}>
             <Route path={BASE_PATH + "/request-form-1"}element={<FormRequestPage1 />}/>
             <Route path={BASE_PATH + "/request-form-2"}element={<FormRequestPage2 />}/>
           </Route>
