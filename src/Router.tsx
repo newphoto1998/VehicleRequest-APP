@@ -8,6 +8,7 @@ import FormRequestPage1 from "./pages/backend/formRequest/page.formRequestPage1"
 import FormRequestPage2 from "./pages/backend/formRequest/page.formRequestPage2";
 import TestUI from "./components/TestUI";
 import Pagenotfound from "./pages/page.notfound";
+import FormRequestPage3 from "./pages/backend/formRequest/page.formRequestPage3";
 
   
 function Router() {
@@ -24,6 +25,7 @@ function Router() {
           <Route element={<BackendLayout />}>
             <Route path={BASE_PATH + "/request-form-1"}element={<FormRequestPage1 />}/>
             <Route path={BASE_PATH + "/request-form-2"}element={<FormRequestPage2 />}/>
+            <Route path={BASE_PATH + "/request-form-3"}element={<FormRequestPage3 />}/>
           </Route>
 
           <Route path={BASE_PATH + "/ui"} element={<TestUI />} />

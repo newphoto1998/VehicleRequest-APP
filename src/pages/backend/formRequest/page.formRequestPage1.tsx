@@ -50,12 +50,10 @@ function FormRequestPage1() {
   const [clear,setclear] = useState<Boolean>(false)
 
   const users: any = localStorage.getItem("user_info");
-  const reqeustFormBase = useSelector(
-    (state: any) => state.requestFormStateReducer.requestFormState
-  );
+  const reqeustFormBase = useSelector((state: any) => state.requestFormStateReducer.requestFormState);
 
   const navigate = useNavigate();
-
+  const trackingStep = useSelector((state:any) => state.trackingStateReducer.trackingState.trackingCount);
   useEffect(() => {
     const localStorageItem: userInfo = JSON.parse(users);
     dispatch({
@@ -97,6 +95,12 @@ function FormRequestPage1() {
         req_Status: "",
         req_By: "",
       },
+    });
+
+
+    dispatch({
+      type: "FIRST_TRACKING_STEP",
+      
     });
 
     getDataAddress();
@@ -177,8 +181,16 @@ function FormRequestPage1() {
 
     if (validate()) {
       // ทำอะไรเมื่อฟอร์มผ่านการตรวจสอบ
+
+      dispatch({
+   
+        type: "NEXT_TRACKING_STEP"
+      
+       })
       navigate("/request-form-2");
     }
+
+    
   };
 
 
@@ -326,7 +338,7 @@ function FormRequestPage1() {
   };
 
   return (
-    <div className="rounded-lg p-8 border border-gray-200 w-full md:w-[60%] bg-white">
+    <div className="rounded-lg p-8 border border-gray-200  bg-white">
       <div className="flex flex-col md:flex-row justify-between gap-10">
         <div>
           <p className="text-2xl">รายละเอียดผู้ร้องขอ</p>

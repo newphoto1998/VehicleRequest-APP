@@ -1,41 +1,26 @@
 import { useEffect, useState } from "react";
-import {
-  Avatar,
-  Badge,
-  Box,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  Typography,
-} from "@mui/material";
+
 import {
   Menu,
   MenuItem,
   Sidebar,
-  SubMenu,
   useProSidebar,
 } from "react-pro-sidebar";
 
 // import { useNavigate } from "react-router-dom";
 
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
-import DescriptionIcon from '@mui/icons-material/Description';
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
+import DescriptionIcon from "@mui/icons-material/Description";
+import { Link } from "react-router-dom";
 
 function AppSidebar() {
   const { collapsed, toggleSidebar } = useProSidebar();
 
-  //  const position:string = "GM"
-  //  const empcode:string = "13257"
-  //13257
-  //14766
 
-  //   const navigate = useNavigate();
   const [activeMenuItem, setActiveMenuItem] = useState("");
   const [collapsedMenu, setcollapsedMenu] = useState<boolean>(true);
-  //   const [depts,setdept] = useState<string>(dept)
-  //   const [sects,setsect] = useState<string>(sect)
-  //   const [groups,setgroup] = useState<string>(group)
+
 
   const [dept, setdept] = useState<string>("");
   const [sect, setsect] = useState<string>("");
@@ -58,96 +43,91 @@ function AppSidebar() {
   };
 
   return (
-    // <Sidebar
-
-    //         style ={{ height:"auto"
-    //          , top: 'auto' }}
-    //         breakPoint="md"
-    //         backgroundColor={'#494C4F'}
-
-    //     >
-    //         <Box sx={styles.avatarContainer}>
-    //             <Avatar sx={styles.avatar} alt="Masoud" src="http://dcidmc.dci.daikin.co.jp/PICTURE/41210.JPG" />
-    //             {!collapsed ?  <Typography  variant="body2" sx={styles.yourChannel}>phatcharaphon</Typography> : null}
-    //             {!collapsed ?  <Typography variant="body2" sx={{color:'black'}}>IT</Typography>: null}
-    //             {!collapsed ?  <Typography variant="body2" sx={{color:'black'}}>ตำแหน่ง : EN</Typography>: null}
-
-    //         </Box>
-    //         <Menu
-    //             menuItemStyles={{
-    //                 button: ({active}) =>{
-    //                     return {
-    //                         background: active ? '#18181B' : '#18181B',
-    //                         color:active? 'white' :'#18181B'
-    //                     }
-    //                 }
-    //             }}>
-
-    //                 <>
-    //                  <MenuItem active={activeMenuItem === "/request-form-1" } component={<Link to="/request-form-1" />} onClick={()=>handleMenuClick("/request-form-1")} icon={<DashboardOutlinedIcon />}> <Typography variant="body1">Dashboard</Typography></MenuItem>
-
-    //                 </>
-
-    //         </Menu >
-    //     </Sidebar >
-
+ 
     <div className="flex h:auto">
       <Sidebar
         style={{ color: "white" }}
         breakPoint="md"
         backgroundColor={"#494C4F"}
       >
+        <div className="flex flex-col items-center h-full w-full  pt-6 gap-2">
+          <div className="flex flex-col items-center justify-center w-full mt-4 gap-4">
+            <div className="w-full flex justify-center items-center">
+              <img
+                className={`${collapsed ? "w-12 h-12" : "w-28 h-28"}   rounded-full`}
+                src="http://dcidmc.dci.daikin.co.jp/PICTURE/41210.jpg"
+                alt=""
+              />
+            </div>
+              {!collapsed ?  (<>
 
-      <div className="flex flex-col items-center h-full w-full  pt-6 gap-2">
-      <div className="flex flex-col items-center justify-center w-full mt-4 gap-4">
-        <div className="w-full flex justify-center items-center">
-          <img
-            className="h-28 w-28  rounded-full"
-            src="http://dcidmc.dci.daikin.co.jp/PICTURE/41210.jpg"
-            alt=""
-          />
-        </div>
-        <div className="text-xl text-center w-full">
-          <p className="text-white">
-            Role: Engineer
-          </p>
-        </div>
-        <div className="text-sm text-center w-full">
-          <p className="text-gray-400">System Devlopment</p>
-        </div>
-      </div>
-      <div className="flex flex-col items-center h-full w-full  pt-6 gap-2">
-        <div className="flex items-center w-full px-10  hover:bg-[#18181B]">
-          <div>
-            <DescriptionIcon className="text-white text-2xl" />
-          </div>
-          <div>
-            <button type="button" className="p-4 w-full">
-              ออกเอกสาร
-            </button>
-          </div>
-        </div>
+                <div className="text-center w-full">
+                  <p className="text-xl text-white">Role: Engineer</p>
+                  <p className="text-sm text-gray-400 mt-1">System Devlopment</p>
 
-        <div className="w-full flex flex-row items-center px-10 hover:bg-[#18181B]">
-          <div>
-            <LocationOnIcon
+                </div>
+            
+              
+              </>):null}
+               
              
-              className="text-white text-2xl"
-            />
+      
           </div>
-          <div >
-            <button type="button" className="p-4 w-full">
-              สถานะเอกสาร
-            </button>
+          
+          <Menu
+            menuItemStyles={{
+              button: ({ active }) => {
+                return {
+                  background: active ? "#18181B" : "transparent",
+                  color: active ? "white" : "",
+                  "&:hover": {
+                    backgroundColor: "#18181B",
+                  },
+                  marginTop: "10px",
+                  paddingLeft: "30px",
+                  paddingRight: "30px",
 
-          </div>
+                };
+              },
+            }}
+          >
+                
+                <Link to={"/request-form-1"}>
+                  <MenuItem
+                    active={
+                      activeMenuItem === "/request-form-1"
+                    }
+                    onClick={() =>
+                      handleMenuClick("/request-form-1")
+                    }
+                    icon={<DescriptionIcon className="text-white text-2xl"/>}
+                  >
+                    {!collapsed ? "  ร้องขอเอกสาร" : ""}
+                  </MenuItem>
+                </Link>
+                      
+              <Link to={"/userreviewapp/backend/UserReviewMonitor"}>
+                <MenuItem
+                  active={
+                    activeMenuItem ===
+                    "/userreviewapp/backend/UserReviewMonitor"
+                  }
+                  onClick={() =>
+                    handleMenuClick("/userreviewapp/backend/UserReviewMonitor")
+                  }
+                  icon={ <LocationOnIcon className="text-white text-2xl " />}
+                >
+                    {!collapsed ? "  ติดตามสถานะ" : ""}
+                
+                </MenuItem>
+              </Link>
+          
+          </Menu>
+
         </div>
-      </div>
-      </div>
       </Sidebar>
     </div>
   );
 }
-
 
 export default AppSidebar;

@@ -331,8 +331,8 @@ function FormRequestPage2() {
   };
 
   return (
-    <div className="h-full ml-80 fixed px-6">
-      <div className="rounded-lg p-8 border border-gray-200 w-full md:w-[60%] bg-white">
+    // <div className="h-full fixed px-2">
+      <div className="rounded-lg p-8 border border-gray-200  bg-white">
       <form onSubmit={handleSubmit}> 
         <div className="flex flex-col gap-3 ">
           <p className="text-xl">หลักฐานการร้องขอ</p>
@@ -633,7 +633,7 @@ function FormRequestPage2() {
         </div>
         </form>
       </div>
-    </div>
+    // </div>
   );
 }
 

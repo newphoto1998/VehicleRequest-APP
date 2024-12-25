@@ -22,11 +22,11 @@ function BackendLayout() {
             <AppSidebar />
             <main className="content">
               <AppNavbar />
-              <div className="bg-white w-full h-[92.75%] p-6 overflow-auto ml-40">
+              <div className="bg-white w-full h-[92.75%] md:p-6 overflow-auto md:ml-32">
               {/* <div className="content_body"> */}
-              <div className="flex flex-row justify-center gap-10">
-                <div>  <Trackingbar/></div>
-                <div> <Outlet /></div>
+              <div className="flex flex-col md:flex-row gap-[50px]">
+                <div className="w-[30%]">  <Trackingbar/></div>
+                <div className="w-[50%]"> <Outlet /></div>
               </div>
               
                  

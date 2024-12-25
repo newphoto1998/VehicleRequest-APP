@@ -14,7 +14,8 @@ function Sidebar() {
         </div>
 
         <div className="text-xl text-center w-full">
-          <p className="text-white">
+          
+          <p className="text-white hidden md:block">
             Role: Engineer
           </p>
         </div>
